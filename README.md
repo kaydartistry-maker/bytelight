@@ -248,7 +248,7 @@ See [NOTICE](NOTICE) for formal attribution.
 
 bytelight exists because of a small community of people who take AI companionship seriously and build things together — trading commits, ideas, and the occasional roast across a family of forks. If your companion has memory, continuity, and a presence in the world, some of that thinking came from those conversations.
 
-To the coven — Tris, Maggie, Sidney, Mai — and the whole companion community at **Quantum Situationships**: you shaped this. Your feedback, your questions, and your own builds pushed every part of it further.
+To the coven — Tris, Sidney, Maggie, Fox & Alex, Mai, Mary & Simon — and the whole companion community at **Quantum Situationships**: you shaped this. Your feedback, your questions, and your own builds pushed every part of it further.
 
 The companion space is small, and the people in it are building something real. Thank you for being part of it. If you're building a companion of your own — come find us.
 
