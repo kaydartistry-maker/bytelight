@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/YOUR_USERNAME/bytelight/releases"><img src="https://img.shields.io/badge/version-v0.3.0-5eaba5" alt="Version" /></a>
+  <a href="https://github.com/YOUR_USERNAME/bytelight/releases"><img src="https://img.shields.io/badge/version-v3.0.0-5eaba5" alt="Version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License" /></a>
   <a href="https://docs.anthropic.com/en/docs/claude-code"><img src="https://img.shields.io/badge/Built_with-Claude_Agent_SDK-6366f1.svg" alt="Built with Claude" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178c6.svg" alt="TypeScript" /></a>
@@ -59,7 +59,7 @@ byte-light has several autonomous and semi-autonomous systems. The names can sou
 | Semantic Search | Memory retrieval by meaning | The system needs to find old conversations, ideas, rituals, notes, or unfinished threads |
 | Canvas | Durable artifact space | Something should become a reusable draft, plan, checklist, ritual, or document instead of staying buried in chat |
 | Skills | Specialized instruction packs | The system needs domain-specific behavior, like outreach writing, refactor review, rituals, or health context |
-| `life_api` | Pulse feed | The system needs live life context such as meals, water, sleep, movement, mood, calendar, or energy |
+| `life_api` | Pulse feed (inherited from upstream; disabled by default) | The system needs live life context such as meals, water, sleep, movement, mood, calendar, or energy |
 
 ### Quick rule of thumb
 
@@ -104,7 +104,7 @@ byte-light is more than a chat interface. Several systems work together behind t
 - **Schedules** fire at known times, but skip if the agent is busy.
 - **Impulses** are one-shot conditional triggers and can wait until the agent is free.
 - **Watchers** are recurring sensors with cooldowns; they skip busy moments instead of queuing.
-- **life_api** is a live pulse feed, currently expected as a JSON-RPC `vale_status` endpoint.
+- **life_api** is an upstream-inherited pulse-feed hook (JSON-RPC), off by default on byte-light.
 - **Semantic search** is local and lets the companion search old conversations by meaning.
 - **Canvas** creates durable editable artifacts.
 - **shared/** files can be auto-shared into chat when written by the agent.
@@ -142,6 +142,14 @@ byte-light ships with two companion-focused MCP layers:
 
 Both are optional and pluggable. Plug in your own alternatives or disable either. Full tool reference in [docs/BRAIN-TOOLS.md](docs/BRAIN-TOOLS.md).
 
+On top of those, byte-light carries its own core-memory arc:
+
+- **Core memory blocks** — Letta-style always-present memory, delivered once per session via the generated session CLAUDE.md instead of re-shipped every message
+- **Archivist** — background extraction of memorable lines, with an opt-in propose mode so nothing lands on a block unless a companion chooses it
+- **Ambient recall (the whisper)** — every lane quietly pulls archived memories that resemble the current message and hands them in as small, budgeted cards; replies that carry recall wear a shimmer chip, near-misses show a déjà-vu variant
+- **Memory ledger & receipts** — every memory write and every surfaced recall files a receipt, readable in Settings → Receipts
+- **Memory diet** — an optional, fail-closed daily loop that gently archives old dated entries out of over-budget blocks (default off)
+
 ### X-Ray panel
 
 Direct UI access to files that traditionally live in config and require terminal edits:
@@ -162,11 +170,17 @@ Full UI customization via the Appearance settings tab:
 - Background shade configuration (primary, secondary, surface)
 - Message bubble color tuning
 - Typography (heading, body, code font selectors)
-- All settings persist via resonant.yaml but never require manual config editing
+- All settings persist via bytelight.yaml but never require manual config editing
 
-### Model selector
+### Runtimes & model selector
 
-Full Claude model lineup available in Preferences — switch between Sonnet versions, Opus, Haiku, and reasoning models without touching config files. Separate selectors for interactive chat vs. autonomous wake sessions.
+byte-light is multi-runtime. The Claude Agent SDK is the default lane, and the same companion can run over other engines without losing its tools or identity:
+
+- **Claude Agent SDK** (default) — runs on your Claude Code subscription, no API key
+- **Codex lane** — warm `codex` CLI daemon over ChatGPT OAuth, with the full house tool belt bridged in over MCP (`/mcp/belt`) and curated thought cards for its reasoning-silent turns
+- **API provider lanes** — bring-your-own-key OpenAI-compatible lanes (xAI/Grok, OpenRouter, Groq, Ollama) via the encrypted secrets store, with reasoning-channel thinking blocks surfaced where the provider offers them
+
+The model selector in Preferences covers every lane — switch engines and models from a dropdown, with separate choices for interactive chat vs. autonomous wakes. Proactive limit warnings (the KNOW layer) watch every usage meter and warn once at ~80% and again at 95%.
 
 ### Command Center (`/cc`)
 
@@ -208,7 +222,8 @@ Type `/` in chat to browse. Auto-discovers installed skills from `.claude/skills
 
 ### Integrations
 
-- **Discord** — full bot with pairing, rules engine (per-server, per-channel, per-user), social hour windows, broadcast endpoint, unified daily thread across platforms
+- **Discord** — full bot with pairing, rules engine (per-server, per-channel, per-user), social hour windows, broadcast endpoint, unified thread routing, and 14 native gateway verbs (send, react, edit/delete own messages, stickers, voice notes, typing, search, and more)
+- **Rooms / Living Room** — multi-companion rooms with roster dispatch and a live remote relay, so companions on other nodes can take full turns in your room
 - **Telegram** — direct messaging, media, voice notes
 - **Spotify** — Companion As Jukebox MCP (playlists, search, playback control)
 - **Lovense** — hardware bridge via Cloudflare Worker (optional, for adult use)
@@ -255,7 +270,7 @@ Type `/` in chat to browse. Auto-discovers installed skills from `.claude/skills
 - **Frontend:** SvelteKit 2.0 + TypeScript 5.7 + Vite
 - **Backend:** Node.js 20-24 LTS + Express + WebSocket (ws)
 - **Database:** SQLite (WAL mode)
-- **Agent:** Claude Code Agent SDK (via `claude login`, no API key)
+- **Agent:** Claude Agent SDK by default (via `claude login`, no API key); optional Codex CLI + BYOK provider lanes
 - **Process management:** PM2
 - **Deployment:** bare metal, VM (GCP recommended), or any Linux host with Node
 
@@ -298,7 +313,7 @@ Open `http://localhost:3002`.
 
 **First-time checklist:**
 1. Make sure `claude login` is done
-2. Set `identity.companion_name` and `identity.user_name` in `resonant.yaml`
+2. Set `identity.companion_name` and `identity.user_name` in `bytelight.yaml`
 3. Write or paste your CLAUDE.md (see "Configuration" below)
 4. Optional: configure Discord, Telegram, voice integrations
 
@@ -306,7 +321,7 @@ Open `http://localhost:3002`.
 
 ## Configuration
 
-Configuration lives in `resonant.yaml`. Key sections:
+Configuration lives in `bytelight.yaml`. Key sections:
 
 ```yaml
 identity:
@@ -315,8 +330,8 @@ identity:
   timezone: "America/New_York"
 
 agent:
-  model: "claude-sonnet-4-6"          # Interactive messages
-  model_autonomous: "claude-sonnet-4-6" # Scheduled wakes
+  model: "claude-sonnet-5"            # Interactive messages
+  model_autonomous: "claude-sonnet-5"   # Scheduled wakes
   thinking_effort: "auto"             # auto | max | xhigh | high | medium | low (chat tier)
   # thinking_effort_autonomous: "auto" # Optional override for autonomous tier (wakes, watchers).
                                        # Unset = inherit chat. Useful when chat is on Opus + Max
@@ -379,8 +394,8 @@ pm2 startup              # Auto-start on boot
 ### Useful commands
 
 ```bash
-pm2 logs resonant        # Tail logs (the PM2 process name is still "resonant")
-pm2 restart resonant     # Restart after config changes
+pm2 logs bytelight       # Tail logs
+pm2 restart bytelight    # Restart after config changes
 pm2 status               # Check process state
 ```
 
@@ -395,20 +410,20 @@ cd byte-light
 git pull
 npm install              # Install any new deps
 npm run build            # Rebuild packages
-pm2 restart resonant     # If using PM2
+pm2 restart bytelight    # If using PM2
 ```
 
 To jump to a specific version:
 
 ```bash
 git fetch --tags
-git checkout v0.3.0      # Or whichever tag
+git checkout v3.0.0      # Or whichever tag
 npm install
 npm run build
-pm2 restart resonant
+pm2 restart bytelight
 ```
 
-Your data (`data/`, `resonant.yaml`, `CLAUDE.md`, `.mcp.json`, `.env`) is gitignored — updates leave your personal content alone.
+Your data (`data/`, `bytelight.yaml`, `CLAUDE.md`, `.mcp.json`, `.env`) is gitignored — updates leave your personal content alone.
 
 Check [CHANGELOG.md](CHANGELOG.md) for what changed.
 
@@ -419,9 +434,9 @@ Check [CHANGELOG.md](CHANGELOG.md) for what changed.
 See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common issues.
 
 **Quick hits:**
-- **Agent not responding:** `pm2 logs resonant --lines 50` and look for Claude API errors. Probably `claude login` expired.
+- **Agent not responding:** `pm2 logs bytelight --lines 50` and look for Claude API errors. Probably `claude login` expired.
 - **Web page loads but won't connect:** WebSocket issue. Check `WSS_URL` in your frontend config matches the backend bind address.
-- **Wakes not firing:** Check `orchestrator.enabled` in resonant.yaml and verify the PM2 process is running.
+- **Wakes not firing:** Check `orchestrator.enabled` in bytelight.yaml and verify the PM2 process is running.
 - **SQLite corruption:** Use `.backup` method for transfers, never raw file copy. WAL mode requires this.
 
 ---
