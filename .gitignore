@@ -1,0 +1,35 @@
+node_modules/
+dist/
+build/
+.svelte-kit/
+*.js.map
+*.tsbuildinfo
+.env
+data/
+logs/
+*.db
+*.db-wal
+*.db-shm
+ecosystem.config.cjs
+bytelight.yaml
+bytelight.yml
+CLAUDE.md
+.mcp.json
+.bytelight-thread
+prompts/
+package-lock.json
+.DS_Store
+Thumbs.db
+screenshots/
+!docs/screenshots/
+.claude/worktrees/
+.claude/skills/
+.claude/memory/
+.agents/
+
+# Internal working docs — plans, trackers, audits, smoke cards.
+# Never commit; this is where the share tool writes.
+shared/
+
+# Companion memory — never commit. Lives locally only.
+memory.md

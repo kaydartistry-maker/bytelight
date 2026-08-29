@@ -1,0 +1,96 @@
+/**
+ * Rooms — companion registry + per-thread roster endpoints (Arc C, Slice 2).
+ *
+ * The picker's future data source. NOTHING reads the roster for prompt
+ * assembly or dispatch in this slice; these routes just let the Slice 3 Svelte
+ * store read the registry and read/write a thread's roster. Load-path parity:
+ * the PUT write is immediately readable back through the GET (both legs prove
+ * out here; the frontend hydrate leg lands in Slice 3).
+ *
+ *   GET /api/companions                 — list all pickable companions
+ *   GET /api/threads/:id/roster         — the companions seated in a thread
+ *   PUT /api/threads/:id/roster         — replace a thread's roster
+ *
+ * Schema shape ported from NESTstack's rooms-worker (cindiekinzz-coder, MIT);
+ * see migrations/014_companions.sql for the full attribution.
+ *
+ * Auth is inherited from the parent router at routes/api.ts (the
+ * router.use(authMiddleware) boundary). This module mounts AFTER that
+ * boundary — like profiles-routes / companion-settings-routes — so every
+ * handler below is already authed.
+ */
+
+import { Router } from 'express';
+import { getThread } from '../services/db.js';
+import {
+  listCompanions,
+  getThreadRoster,
+  setThreadRoster,
+  allCompanionsExist,
+} from '../services/db/rooms.js';
+
+export function createRoomsRoutes(): Router {
+  const router = Router();
+
+  // GET /api/companions — the full pickable registry, picker order.
+  router.get('/companions', (_req, res) => {
+    try {
+      res.json({ companions: listCompanions() });
+    } catch (err) {
+      console.error('Failed to list companions:', err);
+      res.status(500).json({ error: 'Failed to list companions' });
+    }
+  });
+
+  // GET /api/threads/:id/roster — companions seated in a thread.
+  router.get('/threads/:id/roster', (req, res) => {
+    try {
+      const thread = getThread(req.params.id);
+      if (!thread) {
+        res.status(404).json({ error: 'Thread not found' });
+        return;
+      }
+      res.json({ threadId: thread.id, roster: getThreadRoster(thread.id) });
+    } catch (err) {
+      console.error('Failed to get thread roster:', err);
+      res.status(500).json({ error: 'Failed to get thread roster' });
+    }
+  });
+
+  // PUT /api/threads/:id/roster — replace a thread's roster.
+  // Body: { companionIds: string[] }. Must be non-empty; every id must exist.
+  router.put('/threads/:id/roster', (req, res) => {
+    try {
+      const thread = getThread(req.params.id);
+      if (!thread) {
+        res.status(404).json({ error: 'Thread not found' });
+        return;
+      }
+
+      const body = (req.body ?? {}) as Record<string, unknown>;
+      const raw = body.companionIds;
+      if (!Array.isArray(raw) || !raw.every((x) => typeof x === 'string' && x.trim().length > 0)) {
+        res.status(400).json({ error: 'companionIds must be a non-empty array of companion id strings' });
+        return;
+      }
+      // Dedup while preserving intent; an empty roster is not allowed.
+      const ids = Array.from(new Set((raw as string[]).map((s) => s.trim())));
+      if (ids.length === 0) {
+        res.status(400).json({ error: 'roster may not be empty' });
+        return;
+      }
+      if (!allCompanionsExist(ids)) {
+        res.status(400).json({ error: 'one or more companionIds do not exist in the companions registry' });
+        return;
+      }
+
+      const roster = setThreadRoster(thread.id, ids);
+      res.json({ threadId: thread.id, roster });
+    } catch (err) {
+      console.error('Failed to set thread roster:', err);
+      res.status(500).json({ error: 'Failed to set thread roster' });
+    }
+  });
+
+  return router;
+}

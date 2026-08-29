@@ -1,0 +1,33 @@
+{
+  "name": "bytelight",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Relational AI companion framework built on Claude Code Agent SDK",
+  "workspaces": [
+    "packages/shared",
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "npm run dev --workspace=packages/backend",
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:frontend\"",
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/frontend && npm run build --workspace=packages/backend",
+    "start": "npm run start --workspace=packages/backend",
+    "check:prepare": "npm run build --workspace=packages/shared",
+    "check": "npm run check:prepare && npm run check --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=22.19.0 <25.0.0"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "undici": "^6.24.0",
+    "cookie": "^0.7.0"
+  }
+}

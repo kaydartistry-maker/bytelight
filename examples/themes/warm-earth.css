@@ -1,0 +1,43 @@
+/* Warm Earth — a cozy, warm-toned dark theme */
+:root {
+  --bg-primary: #1a1410;
+  --bg-secondary: #221c16;
+  --bg-tertiary: #2a2218;
+  --bg-surface: #332a1e;
+  --bg-input: #1e1812;
+
+  --text-primary: #e8ddd0;
+  --text-secondary: #b0a090;
+  --text-muted: #7a6a58;
+  --text-accent: #e0d0b8;
+
+  --gold: #c89040;
+  --gold-bright: #e0a850;
+  --gold-dim: #a07030;
+  --gold-glow: rgba(200, 144, 64, 0.15);
+  --gold-ember: rgba(200, 144, 64, 0.08);
+
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+
+  --companion-bg: #1e1a14;
+  --companion-border: #3a3020;
+  --companion-accent: var(--gold);
+  --user-bg: #181c14;
+  --user-border: #2a3020;
+  --user-accent: #90a870;
+
+  --status-active: #c89040;
+  --status-waking: #a07030;
+  --status-dormant: #5a5040;
+  --status-offline: #5a4535;
+
+  --border: #302820;
+  --border-hover: #403828;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-gold: rgba(200, 144, 64, 0.08);
+
+  --font-heading: 'Georgia', serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}

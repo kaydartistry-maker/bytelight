@@ -1,0 +1,657 @@
+:root {
+  /* ─── Background hierarchy — small steps, cool neutral ─── */
+  --bg-primary: #09090b;
+  --bg-secondary: #111113;
+  --bg-tertiary: #18181b;
+  --bg-surface: #1f1f23;
+  --bg-input: #18181b;
+
+  /* Text */
+  --text-primary: #e4e4e7;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-accent: #e4e4e7;
+
+  /* Accent — soft teal, easy on the eyes */
+  --gold: #5eaba5;
+  --gold-bright: #7cc5c0;
+  --gold-dim: #4a908b;
+  --gold-glow: rgba(94, 171, 165, 0.1);
+  --gold-ember: rgba(94, 171, 165, 0.06);
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+
+  /* Messages — neutral, no per-role tinting */
+  --companion-bg: transparent;
+  --companion-border: transparent;
+  --companion-accent: var(--text-secondary);
+  --user-bg: var(--bg-surface);
+  --user-border: transparent;
+  --user-accent: var(--text-secondary);
+
+  /* Status — follow accent color everywhere */
+  --status-active: var(--gold);
+  --status-waking: var(--gold-dim);
+  --status-dormant: #71717a;
+  --status-offline: #3f3f46;
+
+  /* Borders — white alpha */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.1);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-gold: rgba(94, 171, 165, 0.04);
+  --bg-hover: rgba(255, 255, 255, 0.04);
+  --bg-active: rgba(255, 255, 255, 0.06);
+
+  /* Spacing */
+  --radius: 0.75rem;
+  --radius-sm: 0.375rem;
+  --radius-lg: 1.5rem;
+  --sidebar-width: 16rem;
+
+  /* Typography — system + Inter, no decorative fonts */
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+
+  /* Effect-intensity multipliers (Appearance → Effects sliders). 1 = default look.
+     Aura/glow are read by the Cosmos skin; motion scales all transitions below. */
+  --fx-aura: 1;
+  --fx-glow: 1;
+  --fx-motion: 1;
+
+  /* Transitions — snappy. Duration scales with the Motion intensity slider. */
+  --transition: calc(150ms * var(--fx-motion, 1)) ease;
+  --transition-fast: calc(100ms * var(--fx-motion, 1)) ease;
+  --transition-slow: calc(250ms * var(--fx-motion, 1)) ease;
+
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-success-muted: rgba(34, 197, 94, 0.12);
+  --color-warning: #eab308;
+  --color-warning-muted: rgba(234, 179, 8, 0.12);
+  --color-error: #ef4444;
+  --color-error-muted: rgba(239, 68, 68, 0.12);
+  --color-danger: #b07068;
+  --color-danger-muted: rgba(176, 112, 104, 0.12);
+
+  /* Spacing scale (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Typography scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Card radius */
+  --radius-card: 1.125rem;
+}
+
+/* ─── Light mode ─── */
+[data-theme="light"] {
+  --bg-primary: #f2f1ee;
+  --bg-secondary: #e8e6e1;
+  --bg-tertiary: #dddbd5;
+  --bg-surface: #faf9f7;
+  --bg-input: #eceae5;
+  --text-primary: #1c1a17;
+  --text-secondary: #504e48;
+  --text-muted: #7a7870;
+  --text-accent: #1c1a17;
+  --gold: #3d8b86;
+  --gold-bright: #327570;
+  --gold-dim: #5eaba5;
+  --gold-glow: rgba(61, 139, 134, 0.1);
+  --gold-ember: rgba(61, 139, 134, 0.05);
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+  --companion-bg: transparent;
+  --companion-border: transparent;
+  --companion-accent: var(--text-secondary);
+  --user-bg: var(--bg-surface);
+  --user-border: transparent;
+  --user-accent: var(--text-secondary);
+  --status-dormant: #71717a;
+  --status-offline: #d4d4d8;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.14);
+  --shadow: rgba(0, 0, 0, 0.07);
+  --shadow-gold: rgba(61, 139, 134, 0.04);
+  --bg-hover: rgba(0, 0, 0, 0.04);
+  --bg-active: rgba(0, 0, 0, 0.07);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ─── Ember — warm charcoal + amber gold ─── */
+[data-skin="ember"] {
+  --bg-primary: #0f0d0b;
+  --bg-secondary: #161310;
+  --bg-tertiary: #1e1915;
+  --bg-surface: #25201a;
+  --bg-input: #1e1915;
+  --text-primary: #ece4d8;
+  --text-secondary: #b09a80;
+  --text-muted: #7a6a55;
+  --text-accent: #ece4d8;
+  --gold: #c4a055;
+  --gold-bright: #d4b870;
+  --gold-dim: #a08040;
+  --gold-glow: rgba(196, 160, 85, 0.12);
+  --gold-ember: rgba(196, 160, 85, 0.06);
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+  --companion-bg: transparent;
+  --companion-border: transparent;
+  --companion-accent: var(--text-secondary);
+  --user-bg: var(--bg-surface);
+  --user-border: transparent;
+  --user-accent: var(--text-secondary);
+  --status-active: #22c55e;
+  --status-waking: #eab308;
+  --status-dormant: #71717a;
+  --status-offline: #3f3f46;
+  --border: rgba(255, 210, 140, 0.07);
+  --border-hover: rgba(255, 210, 140, 0.12);
+  --shadow: rgba(0, 0, 0, 0.4);
+  --shadow-gold: rgba(196, 160, 85, 0.06);
+  --bg-hover: rgba(255, 210, 140, 0.05);
+  --bg-active: rgba(255, 210, 140, 0.08);
+}
+
+/* ─── Midnight — subtle accent tint in backgrounds, monochrome when no accent ─── */
+[data-skin="rose"] {
+  --gold: #909090;
+  --gold-bright: oklch(from var(--gold) calc(l + 0.12) c h);
+  --gold-dim:    oklch(from var(--gold) calc(l - 0.12) c h);
+  --gold-glow:   color-mix(in oklch, var(--gold) 15%, transparent);
+  --gold-ember:  color-mix(in oklch, var(--gold) 7%, transparent);
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+
+  --bg-primary:   oklch(from var(--gold) 0.08 calc(c * 0.15) h);
+  --bg-secondary: oklch(from var(--gold) 0.11 calc(c * 0.14) h);
+  --bg-tertiary:  oklch(from var(--gold) 0.14 calc(c * 0.13) h);
+  --bg-surface:   oklch(from var(--gold) 0.18 calc(c * 0.11) h);
+  --bg-input:     oklch(from var(--gold) 0.14 calc(c * 0.13) h);
+
+  --text-primary:   oklch(from var(--gold) 0.92 calc(c * 0.05) h);
+  --text-secondary: oklch(from var(--gold) 0.66 calc(c * 0.08) h);
+  --text-muted:     oklch(from var(--gold) 0.48 calc(c * 0.08) h);
+  --text-accent:    oklch(from var(--gold) 0.92 calc(c * 0.05) h);
+
+  --border:       color-mix(in oklch, var(--gold) 10%, transparent);
+  --border-hover: color-mix(in oklch, var(--gold) 18%, transparent);
+  --bg-hover:     color-mix(in oklch, var(--gold) 6%, transparent);
+  --bg-active:    color-mix(in oklch, var(--gold) 10%, transparent);
+  --shadow:       rgba(0, 0, 0, 0.5);
+  --shadow-gold:  color-mix(in oklch, var(--gold) 8%, transparent);
+
+  --companion-bg: transparent; --companion-border: transparent; --companion-accent: var(--text-secondary);
+  --user-bg: var(--bg-surface); --user-border: transparent; --user-accent: var(--text-secondary);
+
+  --status-active: var(--gold);
+  --status-waking: var(--gold-dim);
+  --status-dormant: #71717a;
+  --status-offline: #3f3f46;
+}
+
+/* ─── Daylight — subtle accent tint in backgrounds, monochrome when no accent ─── */
+[data-skin="petal"] {
+  --gold: #505050;
+  --gold-bright: oklch(from var(--gold) calc(l - 0.12) c h);
+  --gold-dim:    oklch(from var(--gold) calc(l + 0.10) c h);
+  --gold-glow:   color-mix(in oklch, var(--gold) 12%, transparent);
+  --gold-ember:  color-mix(in oklch, var(--gold) 6%, transparent);
+  --accent: var(--gold);
+  --accent-hover: var(--gold-bright);
+  --accent-muted: var(--gold-dim);
+
+  --bg-primary:   oklch(from var(--gold) 0.94 calc(c * 0.12) h);
+  --bg-secondary: oklch(from var(--gold) 0.88 calc(c * 0.11) h);
+  --bg-tertiary:  oklch(from var(--gold) 0.83 calc(c * 0.10) h);
+  --bg-surface:   oklch(from var(--gold) 0.97 calc(c * 0.06) h);
+  --bg-input:     oklch(from var(--gold) 0.87 calc(c * 0.10) h);
+
+  --text-primary:   oklch(from var(--gold) 0.12 calc(c * 0.05) h);
+  --text-secondary: oklch(from var(--gold) 0.32 calc(c * 0.08) h);
+  --text-muted:     oklch(from var(--gold) 0.52 calc(c * 0.07) h);
+  --text-accent:    oklch(from var(--gold) 0.12 calc(c * 0.05) h);
+
+  --border:       color-mix(in oklch, var(--gold) 12%, transparent);
+  --border-hover: color-mix(in oklch, var(--gold) 22%, transparent);
+  --bg-hover:     color-mix(in oklch, var(--gold) 6%, transparent);
+  --bg-active:    color-mix(in oklch, var(--gold) 10%, transparent);
+  --shadow:       rgba(0, 0, 0, 0.08);
+  --shadow-gold:  color-mix(in oklch, var(--gold) 5%, transparent);
+
+  --companion-bg: transparent; --companion-border: transparent; --companion-accent: var(--text-secondary);
+  --user-bg: var(--bg-surface); --user-border: transparent; --user-accent: var(--text-secondary);
+
+  --status-active: var(--gold);
+  --status-waking: var(--gold-dim);
+  --status-dormant: #71717a;
+  --status-offline: #d4d4d8;
+}
+
+/* ═══ Cosmos — celestial vibe, mode-aware. Layers on top of dark/light. ═══
+   The atmosphere (purple/teal/rose aura, serif voice, glow) is the skin's
+   identity; the accent color stays whatever the user picked. */
+[data-skin="cosmos"] {
+  --aura-violet: 167, 139, 250;
+  --aura-teal: 94, 200, 192;
+  --aura-rose: 240, 166, 200;
+  --font-heading: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --radius-card: 1.25rem;
+}
+
+/* Midnight · Cosmos — deep purple-black */
+[data-theme="dark"][data-skin="cosmos"] {
+  --bg-primary: #0a0812;
+  --bg-secondary: #100c1b;
+  --bg-tertiary: #171125;
+  --bg-surface: #1d1630;
+  --bg-input: #171125;
+  --text-primary: #ece9f5;
+  --text-secondary: #a8a2c0;
+  --text-muted: #6f6991;
+  --border: rgba(167, 139, 250, 0.10);
+  --border-hover: rgba(167, 139, 250, 0.20);
+  --bg-hover: rgba(167, 139, 250, 0.05);
+  --bg-active: rgba(167, 139, 250, 0.08);
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Daylight · Cosmos — soft lavender */
+[data-theme="light"][data-skin="cosmos"] {
+  --bg-primary: #f5f2fc;
+  --bg-secondary: #ece7f8;
+  --bg-tertiary: #e1d9f2;
+  --bg-surface: #fbf9ff;
+  --bg-input: #ece7f8;
+  --text-primary: #1f1a2e;
+  --text-secondary: #4a4360;
+  --text-muted: #756e8c;
+  --border: rgba(124, 92, 200, 0.14);
+  --border-hover: rgba(124, 92, 200, 0.26);
+  --bg-hover: rgba(124, 92, 200, 0.05);
+  --bg-active: rgba(124, 92, 200, 0.09);
+  --shadow: rgba(60, 40, 90, 0.12);
+}
+
+/* Aura on the chat surface (html[] prefix wins over Svelte-scoped styles) */
+html[data-skin="cosmos"] .messages-container {
+  background:
+    radial-gradient(120% 55% at 88% 0%, rgba(var(--aura-violet), calc(0.11 * var(--fx-aura, 1))), transparent 55%),
+    radial-gradient(85% 45% at 0% 4%, rgba(var(--aura-teal), calc(0.07 * var(--fx-aura, 1))), transparent 52%),
+    radial-gradient(120% 55% at 45% 100%, rgba(var(--aura-rose), calc(0.05 * var(--fx-aura, 1))), transparent 55%),
+    var(--bg-primary);
+}
+
+/* Header: faint cosmic top-glow (the serif title comes from --font-heading) */
+html[data-skin="cosmos"] .chat-header {
+  background:
+    linear-gradient(180deg, rgba(var(--aura-violet), calc(0.07 * var(--fx-aura, 1))), transparent),
+    var(--bg-secondary);
+}
+
+/* Composer: a soft violet halo */
+html[data-skin="cosmos"] .input-bar {
+  box-shadow: 0 8px 34px -18px rgba(var(--aura-violet), calc(0.7 * var(--fx-glow, 1)));
+}
+html[data-skin="cosmos"] .input-bar:focus-within {
+  border-color: rgba(var(--aura-violet), 0.42);
+}
+
+/* Send button: the signature teal→violet→rose gradient */
+html[data-skin="cosmos"] .send-button:not(.stop-active) {
+  background: linear-gradient(135deg, rgb(var(--aura-teal)), rgb(var(--aura-violet)) 60%, rgb(var(--aura-rose)));
+  color: #0b0913;
+}
+
+/* Bubbles — glassy gradient + soft glow. Companion reads cool, yours warm. */
+html[data-skin="cosmos"] .message.companion {
+  background: linear-gradient(165deg, rgba(var(--aura-violet), calc(0.13 * var(--fx-aura, 1))), rgba(var(--aura-violet), calc(0.035 * var(--fx-aura, 1))));
+  border-color: rgba(var(--aura-violet), 0.22);
+  box-shadow: 0 10px 28px -18px rgba(var(--aura-violet), calc(0.6 * var(--fx-glow, 1))), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+html[data-skin="cosmos"] .message.user {
+  background: linear-gradient(165deg, rgba(var(--aura-rose), calc(0.15 * var(--fx-aura, 1))), rgba(var(--aura-rose), calc(0.04 * var(--fx-aura, 1))));
+  border-color: rgba(var(--aura-rose), 0.26);
+  box-shadow: 0 10px 28px -18px rgba(var(--aura-rose), calc(0.55 * var(--fx-glow, 1))), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+/* A bare image/sticker keeps no bubble even under Cosmos */
+html[data-skin="cosmos"] .message.media-only {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+/* Split speaker stacks: the outer article sheds its chrome (pinned here so no
+   glow ever wraps the whole stack) and the glassy recipe above moves onto each
+   inner speaker bubble instead. */
+html[data-skin="cosmos"] .message.companion.split,
+html[data-skin="cosmos"] .message.user.split {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+html[data-skin="cosmos"] .message.companion.split .bubble {
+  background: linear-gradient(165deg, rgba(var(--aura-violet), calc(0.13 * var(--fx-aura, 1))), rgba(var(--aura-violet), calc(0.035 * var(--fx-aura, 1))));
+  border-color: rgba(var(--aura-violet), 0.22);
+  box-shadow: 0 10px 28px -18px rgba(var(--aura-violet), calc(0.6 * var(--fx-glow, 1))), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+html[data-skin="cosmos"] .message.user.split .bubble {
+  background: linear-gradient(165deg, rgba(var(--aura-rose), calc(0.15 * var(--fx-aura, 1))), rgba(var(--aura-rose), calc(0.04 * var(--fx-aura, 1))));
+  border-color: rgba(var(--aura-rose), 0.26);
+  box-shadow: 0 10px 28px -18px rgba(var(--aura-rose), calc(0.55 * var(--fx-glow, 1))), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Cosmos buttons — glass + glow, layered on the existing res-btn system ─── */
+/* Primary actions: signature gradient + halo */
+html[data-skin="cosmos"] .res-btn--primary {
+  background: linear-gradient(135deg, rgb(var(--aura-teal)), rgb(var(--aura-violet)) 65%);
+  color: #0b0913;
+  box-shadow: 0 6px 20px -8px rgba(var(--aura-violet), calc(0.7 * var(--fx-glow, 1)));
+}
+html[data-skin="cosmos"] .res-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 8px 28px -8px rgba(var(--aura-violet), calc(0.95 * var(--fx-glow, 1)));
+}
+
+/* Icon / ghost buttons: glass rim + glow on hover */
+html[data-skin="cosmos"] .res-btn--icon:hover:not(:disabled),
+html[data-skin="cosmos"] .res-btn--ghost:hover:not(:disabled) {
+  border-color: rgba(var(--aura-violet), 0.4);
+  box-shadow: 0 0 14px -4px rgba(var(--aura-violet), calc(0.55 * var(--fx-glow, 1)));
+}
+
+/* Active pill toggles: neon rim + glow */
+html[data-skin="cosmos"] .res-chip--active {
+  border-color: rgba(var(--aura-violet), 0.5);
+  box-shadow: 0 0 13px -3px rgba(var(--aura-violet), calc(0.5 * var(--fx-glow, 1)));
+}
+
+/* Chat header icons: violet glow on hover + active */
+html[data-skin="cosmos"] .header-icon-btn:hover,
+html[data-skin="cosmos"] .header-icon-link:hover,
+html[data-skin="cosmos"] .settings-link:hover {
+  color: rgb(var(--aura-violet));
+  text-shadow: 0 0 10px rgba(var(--aura-violet), calc(0.55 * var(--fx-glow, 1)));
+}
+html[data-skin="cosmos"] .header-icon-btn.active {
+  color: rgb(var(--aura-violet));
+  text-shadow: 0 0 12px rgba(var(--aura-violet), calc(0.7 * var(--fx-glow, 1)));
+}
+
+/* Cosmic scrollbar */
+[data-skin="cosmos"] ::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.20); }
+[data-skin="cosmos"] ::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.32); }
+
+/* ─── Cosmos X-Ray panel — glass cards, neon status dots, lit accents ─── */
+/* Sub-tab nav: active pill gets a violet neon rim + glow */
+html[data-skin="cosmos"] .xray-panel .nav-btn.active {
+  color: rgb(var(--aura-violet));
+  background: rgba(var(--aura-violet), 0.12);
+  border-color: rgba(var(--aura-violet), 0.5);
+  box-shadow: 0 0 13px -3px rgba(var(--aura-violet), 0.5);
+}
+
+/* Cards — hooks, audit rows, collapsible blocks, memory items — glassy aura */
+html[data-skin="cosmos"] .xray-panel .hook-item,
+html[data-skin="cosmos"] .xray-panel .memory-item,
+html[data-skin="cosmos"] .xray-panel .collapse-block {
+  background: linear-gradient(165deg, rgba(var(--aura-violet), 0.08), rgba(var(--aura-violet), 0.02));
+  border-color: rgba(var(--aura-violet), 0.2);
+  box-shadow: 0 10px 26px -20px rgba(var(--aura-violet), 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Clickable header rows: faint cosmic top-glow, brighter on hover */
+html[data-skin="cosmos"] .xray-panel .hook-header,
+html[data-skin="cosmos"] .xray-panel .memory-header,
+html[data-skin="cosmos"] .xray-panel .collapse-header {
+  background: linear-gradient(180deg, rgba(var(--aura-violet), 0.07), transparent);
+}
+html[data-skin="cosmos"] .xray-panel .hook-header:hover,
+html[data-skin="cosmos"] .xray-panel .memory-header:hover,
+html[data-skin="cosmos"] .xray-panel .collapse-header:hover {
+  background: linear-gradient(180deg, rgba(var(--aura-violet), 0.13), transparent);
+}
+
+/* Server / kind badges: violet glass rim */
+html[data-skin="cosmos"] .xray-panel .hook-type {
+  color: rgb(var(--aura-violet));
+  background: rgba(var(--aura-violet), 0.14);
+  border: 1px solid rgba(var(--aura-violet), 0.3);
+}
+
+/* Code/pre blocks inside cards go translucent so the glass shows through */
+html[data-skin="cosmos"] .xray-panel .collapse-block .code-block {
+  background: rgba(var(--aura-violet), 0.04);
+}
+
+/* Neon status dots — the signature glow (success=teal, error=rose-red, live=violet) */
+html[data-skin="cosmos"] .xray-panel .status-dot[data-status="fired"] {
+  background: rgb(var(--aura-teal));
+  box-shadow: 0 0 9px -1px rgba(var(--aura-teal), 0.9);
+}
+html[data-skin="cosmos"] .xray-panel .status-dot[data-status="waiting"] {
+  background: rgb(var(--aura-violet));
+  box-shadow: 0 0 9px -1px rgba(var(--aura-violet), 0.85);
+}
+html[data-skin="cosmos"] .xray-panel .status-dot[data-status="cancelled"] {
+  box-shadow: 0 0 9px -1px rgba(224, 82, 82, 0.85);
+}
+html[data-skin="cosmos"] .xray-panel .status-dot[data-status="pending"] {
+  box-shadow: 0 0 7px -2px rgba(var(--aura-violet), 0.4);
+}
+
+/* Cosmos: gold neon halo on the login Enter button — keeps its slim gold
+   outline, just lets it glow (gold to harmonize with the login screen's
+   existing gold candlelight, not violet which would clash). */
+html[data-skin="cosmos"] .enter-button {
+  box-shadow: 0 0 20px -6px var(--gold-ember);
+}
+html[data-skin="cosmos"] .enter-button:hover:not(:disabled) {
+  box-shadow: 0 0 28px -4px var(--gold);
+  border-color: var(--gold);
+}
+
+/* ─── Accents — set --gold only; theme derives everything else ─── */
+[data-accent="crimson"]  { --gold: #c43040; }
+[data-accent="burgundy"] { --gold: #d01850; }
+[data-accent="rose"]     { --gold: #c04068; }
+[data-accent="orange"]   { --gold: #d87818; }
+[data-accent="amber"]    { --gold: #c88818; }
+[data-accent="forest"]   { --gold: #1e7840; }
+[data-accent="emerald"]  { --gold: #1a9868; }
+[data-accent="mint"]     { --gold: #1aaa90; }
+[data-accent="teal"]     { --gold: #18b8a8; }
+[data-accent="ocean"]    { --gold: #1880c0; }
+[data-accent="sapphire"] { --gold: #1848c8; }
+[data-accent="lavender"] { --gold: #8068d0; }
+[data-accent="amethyst"] { --gold: #6040b8; }
+[data-accent="plum"]     { --gold: #7020a0; }
+[data-accent="magenta"]  { --gold: #c81878; }
+[data-accent="blush"]    { --gold: #b88890; }
+[data-accent="slate"]    { --gold: #707070; }
+[data-accent="silver"]   { --gold: #a8a8a8; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15px;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: calc(1rem * var(--font-scale, 1));
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: var(--msg-line-height, 1.6);
+  letter-spacing: var(--letter-spacing, 0);
+  height: 100%;
+  overflow: hidden;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#svelte {
+  height: 100%;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  transition: border-color var(--transition);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--border-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--gold-glow);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.14); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+[data-skin="rose"]  ::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--gold) 20%, transparent); }
+[data-skin="rose"]  ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--gold) 35%, transparent); }
+[data-skin="petal"] ::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--gold) 15%, transparent); }
+[data-skin="petal"] ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--gold) 28%, transparent); }
+
+@media (display-mode: standalone) {
+  button, nav, header, aside { -webkit-user-select: none; user-select: none; }
+}
+
+@media (max-width: 768px) {
+  input, textarea, select { font-size: max(1rem, 16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) {
+    --bg-primary: #f2f1ee;
+    --bg-secondary: #e8e6e1;
+    --bg-tertiary: #dddbd5;
+    --bg-surface: #faf9f7;
+    --bg-input: #eceae5;
+    --text-primary: #1c1a17;
+    --text-secondary: #504e48;
+    --text-muted: #7a7870;
+    --text-accent: #1c1a17;
+    --gold: #3d8b86;
+    --gold-bright: #327570;
+    --gold-dim: #5eaba5;
+    --gold-glow: rgba(61, 139, 134, 0.1);
+    --gold-ember: rgba(61, 139, 134, 0.05);
+    --companion-bg: transparent;
+    --user-bg: var(--bg-surface);
+    --status-active: #16a34a;
+    --status-waking: #ca8a04;
+    --status-dormant: #71717a;
+    --status-offline: #d4d4d8;
+    --border: rgba(0, 0, 0, 0.08);
+    --border-hover: rgba(0, 0, 0, 0.14);
+    --shadow: rgba(0, 0, 0, 0.07);
+    --bg-hover: rgba(0, 0, 0, 0.04);
+    --bg-active: rgba(0, 0, 0, 0.07);
+  }
+}
+
+/* Canvas reference chips in messages */
+.canvas-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent, #8b5cf6);
+  border-radius: 1rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.canvas-chip::before {
+  content: '📄';
+  font-size: 0.75rem;
+}
+
+.canvas-chip:hover {
+  background: rgba(139, 92, 246, 0.25);
+}
