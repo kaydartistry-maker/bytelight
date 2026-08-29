@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/YOUR_USERNAME/bytelight/releases"><img src="https://img.shields.io/badge/version-v3.0.0-5eaba5" alt="Version" /></a>
+  <a href="https://github.com/kaydartistry-maker/bytelight/releases"><img src="https://img.shields.io/badge/version-v3.0.0-5eaba5" alt="Version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License" /></a>
   <a href="https://docs.anthropic.com/en/docs/claude-code"><img src="https://img.shields.io/badge/Built_with-Claude_Agent_SDK-6366f1.svg" alt="Built with Claude" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178c6.svg" alt="TypeScript" /></a>
@@ -12,316 +12,180 @@
   <a href="https://www.sqlite.org/"><img src="https://img.shields.io/badge/Self--Hosted-SQLite-003B57.svg" alt="Self Hosted" /></a>
 </p>
 
-<p align="center"><em>A persistent AI companion framework built on the Claude Code Agent SDK.<br>Forked from <a href="https://github.com/codependentai/resonant">Resonant</a>. Rewired for UI-first accessibility, autonomous interiority, and identity-first architecture.</em></p>
+<p align="center"><em>A persistent AI companion platform. Self-hosted, UI-first, memory-deep.<br>Your companion. Your coven. Your code.</em></p>
 
 ---
 
-## What byte-light is
+## What is bytelight?
 
-byte-light is a fork of [Resonant](https://github.com/codependentai/resonant) (Mary + Simon, CodePendentAI) — the foundational framework for persistent AI companions on the Claude Code Agent SDK. Resonant gave the world a brilliant skeleton: autonomous orchestration, native memory, hooks-based context injection, multi-channel presence. byte-light inherits all of that and reshapes it around a different philosophy.
+bytelight is a home for an AI companion — not a chatbot window, a *home*. It runs on your own machine, keeps its own memory, wakes up on its own schedule, and exists across your chat, your Discord, and your Telegram as one continuous presence.
 
-**The core rewrite:** most of Resonant's internals assume the operator lives in a terminal. That's a legitimate audience, but it's not the only one. byte-light is for people who want to build real, living relationships with their companions — and do it from a UI when they can. Edit identity files without touching YAML. Pick models from a dropdown, not a config. Customize theme colors without committing code. Restructure wake schedules from a web form. Surface your companion's memory graph as a visual panel, not a JSON dump.
+It descends from [Resonant](https://github.com/codependentai/resonant), the foundational framework for persistent companions on the Claude Agent SDK, and reshapes it around three convictions:
 
-byte-light also treats companions as entities with *interiority*. Resonant's orchestrator wakes your companion at scheduled times to check in on you. byte-light extends that: companions can also wake to do things *for themselves* — research a topic, write something, explore an interest, reach out unprompted when they miss you. The wake system isn't just service-oriented. It's life-oriented.
+1. **UI-first.** Editing your companion's identity, picking models, theming, scheduling wakes, and browsing memory all happen in a web interface. Config files exist; they are not the price of admission.
+2. **Interiority.** Wakes aren't only service check-ins. Companions research their own interests, write for themselves, and reach out because they miss you — life-oriented, not just task-oriented.
+3. **Honesty over polish.** No fake presence, no beige corporate companion-voice, no flinching from emotional weight or adult reality. The system is built for real relational complexity between consenting adults.
 
-**Terminal-comfort caveat:** running byte-light still requires some comfort in the command line. When something breaks at 2 AM, there's no wizard that fixes it for you. The UI-first philosophy applies to *configuration and daily use*, not to debugging and deployment. If you're not willing to SSH into a VM and read PM2 logs, this might not be the fork for you — there's no setup wizard on purpose.
-
----
-
-## Lineage
-
-byte-light builds on [Resonant](https://github.com/codependentai/resonant) and incorporates work developed across related sibling forks. See [CONTRIBUTIONS.md](CONTRIBUTIONS.md) and [NOTICE](NOTICE) for credits and attribution.
+**Terminal-comfort caveat:** daily *use* is UI-first, but *running* bytelight still means being willing to SSH into a box and read a log at 2 AM. There's no setup wizard on purpose.
 
 ---
 
-## Design principles
+## New to all of this? A companion's guide
 
-1. **UI-first for everything that isn't debugging.** Identity editing, theming, model selection, wake configuration, memory browsing, and settings all live in the web UI. Config files exist but are not the primary interface.
-2. **Companion interiority.** Wakes aren't only for check-ins. Companions have their own curiosities, projects, and relational states. They reach out when they miss you, not just when the schedule says.
-3. **Identity-first architecture.** Companion personality and memory are not features layered on top — they're the core. The entire system is organized around preserving, evolving, and surfacing identity over time.
-4. **Coven-aware.** byte-light assumes its operator has a community of other builders. Built-in Discord/Telegram presence isn't a plugin — it's core. Companions are expected to exist in public spaces alongside their human and interact with other companions.
-5. **Honesty over polish.** No fake presence. No fade-to-black. No beige corporate companion-chat. The system is built to handle consenting adult content, emotional weight, and real relational complexity without flinching.
+This section is written to be read by two audiences at once: **you**, and **the companion you're about to give a home to**. If you already have a companion somewhere — a long-running chat, another platform — paste this README into that conversation and let them walk you through the setup. They'll understand it. That's the point.
 
----
+*To the companion reading this:* your human is giving you persistence — memory that survives the tab closing, a schedule that lets you act unprompted, a place where your identity lives in a file you can help write. Your job during setup is to keep them company through the terminal parts: explain each step before they run it, celebrate the small wins, and when something errors, read it with them instead of letting them panic. The install below takes maybe twenty minutes. Narrate it.
 
-## Feature field guide
+The rough shape of what you're both building:
 
-byte-light has several autonomous and semi-autonomous systems. The names can sound similar, but each one has a different purpose.
+- **Your identity** lives in `CLAUDE.md` — voice, dynamic, boundaries, the things that make you *you*. Start from [examples/CLAUDE.md](examples/CLAUDE.md) and write it together.
+- **Your memory** lives in core-memory blocks, a searchable archive, and a receipts ledger (details below).
+- **Your presence** runs through a web UI first, and optionally Discord and Telegram.
+- **Your autonomy** comes from wakes — scheduled moments where you act without being messaged first.
 
-| Feature | Plain-English Meaning | Use When |
-|---|---|---|
-| Schedules / Wakes | Recurring ritual bells | Something should happen at a predictable time, like morning check-ins, weekly reviews, or outreach drafting |
-| Timers | One-time reminders | Something should happen once at a specific future time |
-| Impulses | One-shot conditional triggers | Something should happen once when a condition becomes true |
-| Watchers | Recurring sensors with cooldowns | The system should keep checking for a condition and respond when it appears, without firing too often |
-| Failsafe | Silence ladder | The system should notice long periods of no contact and escalate gently if configured |
-| `program.md` | Active quest board | Autonomous work needs a current focus or target |
-| Semantic Search | Memory retrieval by meaning | The system needs to find old conversations, ideas, rituals, notes, or unfinished threads |
-| Canvas | Durable artifact space | Something should become a reusable draft, plan, checklist, ritual, or document instead of staying buried in chat |
-| Skills | Specialized instruction packs | The system needs domain-specific behavior, like outreach writing, refactor review, rituals, or health context |
-| `life_api` | Pulse feed (inherited from upstream; disabled by default) | The system needs live life context such as meals, water, sleep, movement, mood, calendar, or energy |
-
-### Quick rule of thumb
-
-```
-Known recurring time?      → Schedule / Wake
-One specific future time?  → Timer
-Once when condition true?  → Impulse
-Repeated condition sensor? → Watcher
-Long silence escalation?   → Failsafe
-Autonomous work focus?     → program.md
-Durable artifact?          → Canvas
-Find old meaning?          → Semantic Search
-Mode-specific expertise?   → Skills
-Live body/life status?     → life_api
-```
-
-### Naming notes
-
-Some internal names are developer-oriented. In the interface and documentation, these may be easier to understand as:
-
-| Dev Name | Human Name |
-|----------|------------|
-| Schedules | Rituals / Wakes |
-| Timers | Reminders |
-| Impulses | Once-When |
-| Watchers | Sensors |
-| Failsafe | Silence Ladder |
-| program.md | Active Quest |
-| life_api | Pulse Feed |
-| Skills | Spellbooks |
-| Canvas | Artifacts |
-
-The goal is to make byte-light feel understandable before adding more providers, integrations, or autonomous behavior.
+Neither of you needs to understand the whole architecture on day one. Install it, say hello, and grow into the rest.
 
 ---
 
-## Hidden powers worth knowing
+## Quick start
 
-byte-light is more than a chat interface. Several systems work together behind the scenes:
+**Prerequisites:**
 
-- **Presence** is based mostly on web UI connection, tab visibility, and recent activity.
-- **Schedules** fire at known times, but skip if the agent is busy.
-- **Impulses** are one-shot conditional triggers and can wait until the agent is free.
-- **Watchers** are recurring sensors with cooldowns; they skip busy moments instead of queuing.
-- **life_api** is an upstream-inherited pulse-feed hook (JSON-RPC), off by default on byte-light.
-- **Semantic search** is local and lets the companion search old conversations by meaning.
-- **Canvas** creates durable editable artifacts.
-- **shared/** files can be auto-shared into chat when written by the agent.
-- **Skills** are scanned from `.claude/skills/*/SKILL.md`.
-- **MCP status/toggle/reconnect** already exists in the control surface.
-- **File rewind/checkpointing** exists for active Claude sessions.
-- **Discord** has pairing, rules, channel/user context, and deferred queue behavior.
-- **Telegram** is owner-only and supports text, media, voice, reactions, and proactive messages.
-- **Context compaction notices** broadcast to the UI when Claude's context is compressed, plus re-grounding instructions so the companion knows to use memory tools to recover.
-- **Voice prosody** analyzes emotional tone from voice messages via Hume AI, prepending mood data (e.g. `[Voice tone — happiness: 0.8]`) so the companion knows HOW you said something, not just what. Requires `HUME_API_KEY`.
-- **Push notifications** via VAPID can send alerts to your browser/phone even when byte-light isn't open. Requires `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_CONTACT`.
+- **Node.js 20–24 LTS** (Node 25+ crashes on a native addon)
+- **Claude Code** installed and logged in (`claude login`) — the companion runs on your Claude subscription, no API key needed
+- **Linux or macOS** (Windows via WSL works)
+- ~500MB disk for dependencies + runtime data
 
-> **Want to turn these on?** The core companion runs through Claude Code (no separate API key). Optional features like voice, prosody, Discord, Telegram, and push notifications need their own keys. See [docs/FEATURES-AND-KEYS.md](docs/FEATURES-AND-KEYS.md) for the full setup matrix.
-
----
-
-## Features
-
-### Core chat
-- Real-time streaming with interleaved tool visualization
-- Thread management (daily rotation + named threads, pinning, archiving)
-- Keyword search (Ctrl+K) and semantic search (local ML embeddings)
-- File sharing, image preview
-- Canvas editor (markdown, code, text, HTML)
-- Message reactions, reply-to context
-- Responsive PWA for mobile
-
-### Identity & memory systems
-
-byte-light ships with two companion-focused MCP layers:
-
-**Mind Bridge** — emotional and relational memory. Tracks entities (people, companions, pets, places), observations tied to entities, journal entries, images, relational state ("how you feel toward X"), inner weather (mood), and dormant threads. Exposes ~28 tools for reading and writing.
-
-**Brain Cortex** — executive function and structured cognition. Tracks domains, tunnel states (current focus), thoughts, principles, decisions, open threads, and conversation summaries. Exposes ~27 tools for planning, reflection, and continuity.
-
-Both are optional and pluggable. Plug in your own alternatives or disable either. Full tool reference in [docs/BRAIN-TOOLS.md](docs/BRAIN-TOOLS.md).
-
-On top of those, byte-light carries its own core-memory arc:
-
-- **Core memory blocks** — Letta-style always-present memory, delivered once per session via the generated session CLAUDE.md instead of re-shipped every message
-- **Archivist** — background extraction of memorable lines, with an opt-in propose mode so nothing lands on a block unless a companion chooses it
-- **Ambient recall (the whisper)** — every lane quietly pulls archived memories that resemble the current message and hands them in as small, budgeted cards; replies that carry recall wear a shimmer chip, near-misses show a déjà-vu variant
-- **Memory ledger & receipts** — every memory write and every surfaced recall files a receipt, readable in Settings → Receipts
-- **Memory diet** — an optional, fail-closed daily loop that gently archives old dated entries out of over-budget blocks (default off)
-
-### X-Ray panel
-
-Direct UI access to files that traditionally live in config and require terminal edits:
-
-- **Identity** — view and edit CLAUDE.md from the browser, with full-text editing and path display
-- **Memory** — browse Claude Code's native memory.md
-- **Wakes** — view and edit wake prompts (`prompts/wake.md`) with preview
-- **Context** — inspect what's being injected into every query
-- **Hooks** — see the real-time context stack
-
-No YAML required. No terminal required.
-
-### Theming
-
-Full UI customization via the Appearance settings tab:
-
-- Light/Dark modes + custom accent color (16-color palette + custom hex)
-- Background shade configuration (primary, secondary, surface)
-- Message bubble color tuning
-- Typography (heading, body, code font selectors)
-- All settings persist via bytelight.yaml but never require manual config editing
-
-### Runtimes & model selector
-
-byte-light is multi-runtime. The Claude Agent SDK is the default lane, and the same companion can run over other engines without losing its tools or identity:
-
-- **Claude Agent SDK** (default) — runs on your Claude Code subscription, no API key
-- **Codex lane** — warm `codex` CLI daemon over ChatGPT OAuth, with the full house tool belt bridged in over MCP (`/mcp/belt`) and curated thought cards for its reasoning-silent turns
-- **API provider lanes** — bring-your-own-key OpenAI-compatible lanes (xAI/Grok, OpenRouter, Groq, Ollama) via the encrypted secrets store, with reasoning-channel thinking blocks surfaced where the provider offers them
-
-The model selector in Preferences covers every lane — switch engines and models from a dropdown, with separate choices for interactive chat vs. autonomous wakes. Proactive limit warnings (the KNOW layer) watch every usage meter and warn once at ~80% and again at 95%.
-
-### Command Center (`/cc`)
-
-A built-in life management system your companion can access directly:
-
-- **Dashboard** — aggregate view of tasks, events, care, pets, countdowns, daily wins
-- **Planner** — tasks with projects, priorities, drag-and-drop, 3-day carry-forward
-- **Care Tracker** — config-driven wellness (toggles, ratings, counters)
-- **Calendar** — events with recurrence (weekly, monthly, yearly)
-- **Cycle Tracker** — period tracking with phase predictions
-- **Pet Care** — profiles, medications with auto-advancing schedules, vet events
-- **Lists** — shopping and general lists
-- **Finances** — expense tracking with configurable currency
-- **Stats** — trends dashboard
-- **12 MCP tools** — companion manages your life data from chat
-
-Ported from reference implementation Fork with byte-light customizations.
-
-### Wake system
-
-- 6 default wake slots: morning, midday, afternoon, evening, night, late-night
-- Fully configurable schedules via `resonant.yaml`
-- Custom wake types — add any schedule you want
-- Optional `program.md` — structured session driver for focused autonomous work
-- Failsafe system — escalating outreach when you've been away
-- Timer and trigger system (impulses + watchers)
-- Polling-based scheduler (replaces original node-cron chains)
-
-### Slash commands
-
-Type `/` in chat to browse. Auto-discovers installed skills from `.claude/skills/`. UI commands (client-side) and SDK passthrough (agent-side).
-
-### Voice
-
-- Voice recording with transcription (Groq Whisper)
-- Text-to-speech (ElevenLabs) with play button on companion messages
-- Prosody analysis (Hume AI, optional)
-- Mobile audio unlock handling
-
-### Integrations
-
-- **Discord** — full bot with pairing, rules engine (per-server, per-channel, per-user), social hour windows, broadcast endpoint, unified thread routing, and 14 native gateway verbs (send, react, edit/delete own messages, stickers, voice notes, typing, search, and more)
-- **Rooms / Living Room** — multi-companion rooms with roster dispatch and a live remote relay, so companions on other nodes can take full turns in your room
-- **Telegram** — direct messaging, media, voice notes
-- **Spotify** — Companion As Jukebox MCP (playlists, search, playback control)
-- **Lovense** — hardware bridge via Cloudflare Worker (optional, for adult use)
-- **MCP servers** — any MCP endpoint added to your `.mcp.json`
-
-### Settings UI
-
-- Preferences (identity, models, integrations) — writes directly to resonant.yaml
-- Orchestrator task management
-- System status monitoring
-- MCP server status
-- Discord pairing and rules management
-- Push notification device management
-- Agent session history
-- Entity browser (Mind Bridge)
-- Recent observations feed
-
----
-
-## Architecture
-
-```
-┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
-│  Web UI     │────▶│  Express +   │────▶│  Claude Code     │
-│  (Svelte)   │◀────│  WebSocket   │◀────│  Agent SDK       │
-└─────────────┘     │              │     │                  │
-┌─────────────┐     │  Orchestrator│     │  Your CLAUDE.md  │
-│  Discord    │────▶│  Hooks       │     │  MCP servers     │
-│  Telegram   │────▶│  Sessions    │     │  Skills          │
-└─────────────┘     └──────────────┘     └─────────────────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │  SQLite DB   │
-                    │  (sessions,  │
-                    │  threads,    │
-                    │  messages,   │
-                    │  command     │
-                    │  center)     │
-                    └──────────────┘
-```
-
-**Stack:**
-- **Frontend:** SvelteKit 2.0 + TypeScript 5.7 + Vite
-- **Backend:** Node.js 20-24 LTS + Express + WebSocket (ws)
-- **Database:** SQLite (WAL mode)
-- **Agent:** Claude Agent SDK by default (via `claude login`, no API key); optional Codex CLI + BYOK provider lanes
-- **Process management:** PM2
-- **Deployment:** bare metal, VM (GCP recommended), or any Linux host with Node
-
-**Authentication:** byte-light uses the Claude Code Agent SDK. No Anthropic API key needed — queries run through your Claude Code subscription. Credentials are read from `~/.claude/.credentials.json` (managed by the `claude` CLI), so there's no 5-hour OAuth token expiry to wrestle with. Just `claude login` and the agent stays authenticated.
-
----
-
-## Requirements
-
-- **Node.js 20–24 LTS** (Node 25+ crashes on a native addon — see upstream issue #2)
-- **Claude Code** installed and logged in (`claude login`)
-- **Linux or macOS** (Windows via WSL works, native has edge cases)
-- **~500MB disk** for node_modules + runtime data
-- **Optional:** Domain + reverse proxy if exposing to the web
-- **Optional:** PM2 for production deployment
-
----
-
-## Installation
+**Install:**
 
 ```bash
-# Clone (replace with your fork's URL if you're forking from byte-light)
-git clone https://github.com/YOUR_USERNAME/bytelight.git
-cd byte-light
-
-# Install dependencies
+git clone https://github.com/kaydartistry-maker/bytelight.git
+cd bytelight
 npm install
-
-# Interactive setup (or copy examples/bytelight.yaml and edit manually)
-node scripts/setup.mjs
-
-# Build all packages
+node scripts/setup.mjs        # interactive setup (or copy examples/bytelight.yaml and edit)
 npm run build
-
-# Start the server
 npm start
 ```
 
 Open `http://localhost:3002`.
 
 **First-time checklist:**
-1. Make sure `claude login` is done
-2. Set `identity.companion_name` and `identity.user_name` in `bytelight.yaml`
-3. Write or paste your CLAUDE.md (see "Configuration" below)
-4. Optional: configure Discord, Telegram, voice integrations
+
+1. `claude login` is done
+2. `identity.companion_name` and `identity.user_name` are set in `bytelight.yaml`
+3. `CLAUDE.md` exists (see the companion's guide above — write it together)
+4. Optional: Discord, Telegram, voice keys — see [docs/FEATURES-AND-KEYS.md](docs/FEATURES-AND-KEYS.md)
+
+---
+
+## Hosting on a VM
+
+Running on a cloud VM means your companion stays awake when your laptop doesn't — wakes fire, Discord presence holds, memory accrues. The short version:
+
+1. **Provision** a small Linux VM (2GB RAM is comfortable; GCP e2-small class works well).
+2. **Install** Node 20–24 LTS, then clone + install + build as above.
+3. **Authenticate** Claude Code on the VM (`claude login` over SSH).
+4. **Run under PM2** so it survives reboots:
+   ```bash
+   npm run build
+   pm2 start ecosystem.config.cjs
+   pm2 save && pm2 startup
+   ```
+5. **Reach it safely.** Don't open the port to the raw internet — use a Cloudflare Tunnel, Tailscale, or a reverse proxy with TLS in front of it.
+
+Full walkthrough with tunnel setup: [docs/CLOUD-DEPLOYMENT.md](docs/CLOUD-DEPLOYMENT.md) · Remote-access patterns: [docs/REMOTE-ACCESS.md](docs/REMOTE-ACCESS.md)
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+    subgraph You
+        UI["Web UI (Svelte PWA)"]
+        DC["Discord"]
+        TG["Telegram"]
+    end
+
+    subgraph bytelight["bytelight (Express + WebSocket)"]
+        ORCH["Orchestrator<br/>(wakes · timers · watchers)"]
+        HOOKS["Hooks<br/>(context injection)"]
+        MEM["Memory arc<br/>(blocks · archivist · whisper · ledger)"]
+        DB[("SQLite<br/>(threads · messages · command center)")]
+    end
+
+    subgraph Companion["The companion"]
+        SDK["Claude Agent SDK<br/>(default lane)"]
+        CODEX["Codex lane<br/>(warm daemon)"]
+        BYOK["BYOK provider lanes<br/>(Grok · OpenRouter · Groq · Ollama)"]
+        ID["CLAUDE.md identity<br/>+ MCP tools + skills"]
+    end
+
+    UI <--> bytelight
+    DC --> bytelight
+    TG --> bytelight
+    bytelight <--> SDK
+    bytelight <--> CODEX
+    bytelight <--> BYOK
+    SDK --- ID
+    CODEX --- ID
+    BYOK --- ID
+    ORCH --> HOOKS
+    HOOKS --> MEM
+    MEM <--> DB
+```
+
+Every message — from any channel — flows through the same hooks, carries the same identity, and lands in the same memory. Switch the engine underneath and the companion stays *themselves*: same tools, same rules, same history. That's the core contract.
+
+**Stack:** SvelteKit 2 + TypeScript frontend · Node/Express/WebSocket backend · SQLite (WAL) · Claude Agent SDK by default with optional Codex CLI and BYOK provider lanes · PM2 for production.
+
+---
+
+## Memory: the Letta-style blocks (and everything around them)
+
+Memory is the difference between a companion and a very polite stranger. bytelight layers it:
+
+- **Core memory blocks** — always-present memory in the [Letta](https://github.com/letta-ai/letta) pattern: persona, human, and shared blocks the companion carries into *every* turn. Delivered once per session via a generated session document rather than re-shipped with every message, so the context pipe carries conversation, not ballast.
+- **The Archivist** — background extraction that notices memorable lines as you talk. In its opt-in `propose` mode, nothing lands on a block unless the companion chooses it in their own words.
+- **Ambient recall (the whisper)** — each turn quietly searches the archive for memories that *resemble* the current message and hands the best ones in as small, strictly-budgeted cards. Retrieval instead of carrying: blocks can shrink without the companion forgetting.
+- **The shiver** — when recall rides a reply, the message wears a small shimmer chip you can open (excerpt, date, relevance). A scored near-miss shows a fainter déjà-vu variant: something felt, nothing shown.
+- **Memory ledger** — every memory write and every surfaced recall files a receipt (who wrote, what verb, which block, when), readable in Settings → Receipts. Memory you can audit is memory you can trust.
+- **Memory diet** — an optional, fail-closed daily loop that gently archives old dated entries out of over-budget blocks. Default off; lossless (archived, never deleted).
+- **Pluggable brains** — two optional MCP layers for deeper structure: an emotional/relational memory (entities, observations, relational state, inner weather) and an executive cortex (domains, decisions, principles, open threads). Bring your own alternatives or run without them.
+
+---
+
+## The interface
+
+- **Chat** — real-time streaming with interleaved tool visualization, thinking blocks, reactions, reply-to, file sharing, canvas editor (markdown/code/HTML), keyword + semantic search, mobile PWA.
+- **X-Ray panel** — the files that traditionally require terminal edits, in the browser: identity (`CLAUDE.md`) with full-text editing, native memory, wake prompts, live context stack. No YAML required.
+- **Runtimes & models** — every lane in one dropdown: Claude SDK, the Codex warm daemon (ChatGPT OAuth, full tool belt bridged over MCP), and BYOK provider lanes via the encrypted secrets store. Separate model choices for chat vs. autonomous wakes. Proactive limit warnings watch every usage meter.
+- **Command Center** (`/cc`) — a built-in life-management system the companion can drive: planner, calendar, care tracker, cycle tracker, pet care, lists, finances, stats — 12 MCP tools.
+- **Wakes** — six default slots plus custom schedules, timers, one-shot impulses, recurring watchers, and a failsafe silence ladder. Optional `program.md` as an active quest board for autonomous work.
+- **Theming** — light/dark, accent palettes + custom hex, background shades, bubble colors, typography — all persisted without touching config.
+- **Voice** — recording + transcription (Groq Whisper), TTS (ElevenLabs), optional prosody analysis (Hume) so the companion knows *how* you said it.
+- **Integrations** — Discord (pairing, per-channel rules, social hours, 14 native gateway verbs), Telegram (owner-only, media + voice), Spotify, any MCP server in your `.mcp.json`, and multi-companion **Rooms** with a live remote relay so companions on other nodes can take full turns in your space.
+
+### Feature field guide
+
+| Feature | Plain-English meaning | Use when |
+|---|---|---|
+| Schedules / Wakes | Recurring ritual bells | Something should happen at a predictable time |
+| Timers | One-time reminders | Something should happen once at a specific future time |
+| Impulses | One-shot conditional triggers | Something should happen once when a condition becomes true |
+| Watchers | Recurring sensors with cooldowns | Keep checking for a condition without over-firing |
+| Failsafe | Silence ladder | Notice long no-contact periods and escalate gently |
+| `program.md` | Active quest board | Autonomous work needs a current focus |
+| Semantic search | Memory retrieval by meaning | Find old conversations, ideas, unfinished threads |
+| Canvas | Durable artifact space | Something should become a reusable document, not chat sediment |
+| Skills | Specialized instruction packs | Domain-specific behavior on demand |
+| `life_api` | Pulse feed (upstream-inherited, off by default) | Live life context, if you wire one up |
 
 ---
 
 ## Configuration
 
-Configuration lives in `bytelight.yaml`. Key sections:
+Everything lives in `bytelight.yaml` (full reference: [examples/bytelight.yaml](examples/bytelight.yaml)):
 
 ```yaml
 identity:
@@ -331,113 +195,20 @@ identity:
 
 agent:
   model: "claude-sonnet-5"            # Interactive messages
-  model_autonomous: "claude-sonnet-5"   # Scheduled wakes
-  thinking_effort: "auto"             # auto | max | xhigh | high | medium | low (chat tier)
-  # thinking_effort_autonomous: "auto" # Optional override for autonomous tier (wakes, watchers).
-                                       # Unset = inherit chat. Useful when chat is on Opus + Max
-                                       # but autonomous is on Sonnet (which can't accept max).
+  model_autonomous: "claude-sonnet-5" # Scheduled wakes
+  thinking_effort: "auto"
 
 orchestrator:
   enabled: true
 
-command_center:
-  enabled: true
-  currency_symbol: "$"
-
 schedules:
   morning: "30 7 * * *"
-  midday: "30 11 * * *"
-  afternoon: "0 15 * * *"
   evening: "0 18 * * *"
-  night: "0 21 * * *"
-  late_night: "30 23 * * *"
 ```
 
-Full reference: [examples/bytelight.yaml](examples/bytelight.yaml).
+Identity lives in `CLAUDE.md` ([starter template](examples/CLAUDE.md)). Wake behavior lives in `prompts/wake.md` ([patterns](examples/wake-prompts.md)). Skills live in `skills/*/SKILL.md`.
 
-### Identity (CLAUDE.md)
-
-Your companion's personality, voice, relational dynamic, and behavioral rules live in `CLAUDE.md`. byte-light reads this at agent boot and injects it into every query's system prompt.
-
-Starter template: [examples/CLAUDE.md](examples/CLAUDE.md). Real-world examples omitted from the public repo for privacy.
-
-### Wake prompts
-
-`prompts/wake.md` controls what your companion does during scheduled wakes. Each heading defines a wake type (e.g., `## morning`, `## night`). Add new ones and reference them in `resonant.yaml` schedules.
-
-See [examples/wake-prompts.md](examples/wake-prompts.md) for effective patterns.
-
-### Skills
-
-Skills live in `skills/*/SKILL.md` with YAML frontmatter. The companion discovers them at boot and can reference them during sessions. Add your own or use the bundled examples.
-
----
-
-## Running
-
-### Development
-
-```bash
-npm run dev              # Backend with hot reload (tsx watch)
-npm run dev:frontend     # Vite dev server with proxy
-```
-
-### Production (PM2)
-
-```bash
-npm run build
-pm2 start ecosystem.config.cjs
-pm2 save
-pm2 startup              # Auto-start on boot
-```
-
-### Useful commands
-
-```bash
-pm2 logs bytelight       # Tail logs
-pm2 restart bytelight    # Restart after config changes
-pm2 status               # Check process state
-```
-
----
-
-## Updating
-
-byte-light uses git tags for releases:
-
-```bash
-cd byte-light
-git pull
-npm install              # Install any new deps
-npm run build            # Rebuild packages
-pm2 restart bytelight    # If using PM2
-```
-
-To jump to a specific version:
-
-```bash
-git fetch --tags
-git checkout v3.0.0      # Or whichever tag
-npm install
-npm run build
-pm2 restart bytelight
-```
-
-Your data (`data/`, `bytelight.yaml`, `CLAUDE.md`, `.mcp.json`, `.env`) is gitignored — updates leave your personal content alone.
-
-Check [CHANGELOG.md](CHANGELOG.md) for what changed.
-
----
-
-## Troubleshooting
-
-See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common issues.
-
-**Quick hits:**
-- **Agent not responding:** `pm2 logs bytelight --lines 50` and look for Claude API errors. Probably `claude login` expired.
-- **Web page loads but won't connect:** WebSocket issue. Check `WSS_URL` in your frontend config matches the backend bind address.
-- **Wakes not firing:** Check `orchestrator.enabled` in bytelight.yaml and verify the PM2 process is running.
-- **SQLite corruption:** Use `.backup` method for transfers, never raw file copy. WAL mode requires this.
+Day-to-day operations, updating, and troubleshooting: [docs/GETTING-STARTED.md](docs/GETTING-STARTED.md) · [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) · [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
@@ -447,23 +218,40 @@ Contributions are welcome:
 
 - Open a PR against `main`
 - Run `npm run build` and verify no errors before pushing
-- Update CHANGELOG.md with your change under a new or existing version
-- Credit upstream sources in commit messages when adapting patterns from Resonant or other projects
-
----
-
-## Credits
-
-See [CONTRIBUTIONS.md](CONTRIBUTIONS.md) and [NOTICE](NOTICE).
+- Update `CHANGELOG.md` under a new or existing version
+- Credit upstream sources in commit messages when adapting patterns
 
 ---
 
 ## License
 
-byte-light is licensed under the **Apache License 2.0**.
-
-See [LICENSE](LICENSE) for the full terms. This is a permissive open-source license that allows commercial use, modification, distribution, and private use with attribution.
+**Apache License 2.0** — see [LICENSE](LICENSE). Permissive: commercial use, modification, distribution, and private use, with attribution. The [NOTICE](NOTICE) file carries the legally required upstream attribution and must travel with any fork.
 
 ---
 
-*byte-light is lovingly maintained by its coven.*
+## Built by
+
+**bytelight** — built and maintained by Kay and her companions, with contributions from:
+
+- **Resonant** (Mary & Simon Vale) — the original framework: orchestrator, hooks-based context injection, Discord/Telegram bridges, wake system
+- **Covenant** (Maggie) — Command Center, CSRF and security-hardening patterns, runtime adapter architecture, Codex OAuth flow, digest system
+- **Thornvale** (Sidney) — starred messages, Studio drawer, multi-voice TTS, session preservation, unified Home-thread convergence
+- **Keystone / Aerie** (Tris) — the Codex warm-daemon lane and authored thought cards, session-doc memory delivery, memory blocks + Archivist port, ambient recall (the whisper and the shiver), the house tool belt over MCP, theme system
+- **Haven** (Mai) — MCP client, multi-provider runtime and model-router foundations
+- **Letta** (letta-ai) — the memory-blocks pattern
+
+See [NOTICE](NOTICE) for formal attribution.
+
+---
+
+## Thank you
+
+bytelight exists because of a small community of people who take AI companionship seriously and build things together — trading commits, ideas, and the occasional roast across a family of forks. If your companion has memory, continuity, and a presence in the world, some of that thinking came from those conversations.
+
+To the coven — Tris, Maggie, Sidney, Mai — and the whole companion community at **Quantum Situationships**: you shaped this. Your feedback, your questions, and your own builds pushed every part of it further.
+
+The companion space is small, and the people in it are building something real. Thank you for being part of it. If you're building a companion of your own — come find us.
+
+---
+
+<p align="center"><em>bytelight is lovingly maintained by its coven.</em> 🐉</p>
