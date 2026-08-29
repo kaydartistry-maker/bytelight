@@ -100,6 +100,7 @@ Full walkthrough with tunnel setup: [docs/CLOUD-DEPLOYMENT.md](docs/CLOUD-DEPLOY
 ## How it works
 
 ```mermaid
+%%{init: {'theme':'dark','themeVariables':{'lineColor':'#8b5cf6','textColor':'#e8e3f5'}}}%%
 flowchart LR
     subgraph You
         UI["Web UI (Svelte PWA)"]
@@ -133,6 +134,16 @@ flowchart LR
     ORCH --> HOOKS
     HOOKS --> MEM
     MEM <--> DB
+
+    classDef you fill:#0b1020,stroke:#4cc9f0,color:#dff6ff
+    classDef core fill:#160a24,stroke:#f038ff,color:#fce7ff
+    classDef comp fill:#120826,stroke:#a78bfa,color:#ede9fe
+    class UI,DC,TG you
+    class ORCH,HOOKS,MEM,DB core
+    class SDK,CODEX,BYOK,ID comp
+    style You fill:#050810,stroke:#4cc9f0,color:#4cc9f0
+    style bytelight fill:#0a0512,stroke:#f038ff,color:#f038ff
+    style Companion fill:#080514,stroke:#a78bfa,color:#a78bfa
 ```
 
 Every message — from any channel — flows through the same hooks, carries the same identity, and lands in the same memory. Switch the engine underneath and the companion stays *themselves*: same tools, same rules, same history. That's the core contract.
